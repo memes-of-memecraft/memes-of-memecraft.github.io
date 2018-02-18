@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Battle</title>
+  </head>
+
+  <body>
+    <!-- HTML START -->
+    <button id="player0-button" onclick="move(0)">Make player 1 move</button>
+    <button id="player1-button" onclick="move(1)">Make player 2 move</button>
+    <button id="join-queue" onclick="joinQueue()">Join queue</button>
+    <div id="battle-log"></div>
+    <!-- HTML END -->
+  <script>
+
+let moves = [
+  [
+    {
+      playerId: 0,
+      type: 'switch',
+      id: 0
+    },
+    {
+      playerId: 0,
+      type: 'attack',
+      id: 0
+    },
+    {
+      playerId: 0,
+      type: 'attack',
+      id: 1
+    },
+    {
+      playerId: 0,
+      type: 'attack',
+      id: 1
+    }
+  ],
+  [
+    {
+      playerId: 1,
+      type: 'switch',
+      id: 1
+    },
+    {
+      playerId: 1,
+      type: 'switch',
+      id: 0
+    },
+    {
+      playerId: 1,
+      type: 'attack',
+      id: 0
+    },
+    {
+      playerId: 1,
+      type: 'death switch',
+      id: 2
+    },
+    {
+      playerId: 1,
+      type: 'attack',
+      id: 0
+    }
+  ]
+];
+
+let movesStack = [
+  {
+    playerId: 0,
+    type: 'switch',
+    id: 0
+  },
+  {
+    playerId: 1,
+    type: 'switch',
+    id: 1
+  },
+  {
+    playerId: 0,
+    type: 'attack',
+    id: 0
+  },
+  {
+    playerId: 1,
+    type: 'switch',
+    id: 0
+  },
+  {
+    playerId: 0,
+    type: 'attack',
+    id: 1
+  },
+  {
+    playerId: 1,
+    type: 'attack',
+    id: 0
+  },
+  {
+    playerId: 0,
+    type: 'attack',
+    id: 1
+  },
+  {
+    playerId: 1,
+    type: 'death switch',
+    id: 2
+  },
+  {
+    playerId: 1,
+    type: 'attack',
+    id: 0
+  }
+];
+
+remoteMoveStack = []
+
+function post(url, postBody, cb) {
+  fetch(url, {
+    body: JSON.stringify(postBody),
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'include', // include, *omit
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'POST', // *GET, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *same-origin
+    redirect: 'follow', // *manual, error
+    referrer: 'no-referrer', // *client
+  }).then(function(response) {
+    console.log(response);
+    cb(response);
+  });
+}
+
+function joinQueue() {
+  post('http://localhost:3000/findGame', {'address': 'addr', 'lossSig': 'sig'}, function(res) {});
+}
+
+function sendMove(move) {
+  fetch('http://localhost:3000/move', {
+    body: JSON.stringify({'move': move}),
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'include', // include, *omit
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'POST', // *GET, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *same-origin
+    redirect: 'follow', // *manual, error
+    referrer: 'no-referrer', // *client
+  }).then(function(response) {
+    console.log(response);
+  });
+}
+
+function move(playerIndex) {
+  const nextMoveIndex = remoteMoveStack.length;
+  var div = document.getElementById('battle-log');
+  if (nextMoveIndex === movesStack.length || movesStack[nextMoveIndex].playerId !== playerIndex) {
+    div.innerHTML += 'Not your move!<br/>';
+    return
+  }
+  var nextMove = movesStack[nextMoveIndex];
+  console.log(nextMove)
+  sendMove(nextMove)
+  console.log('Made move for player: ' + playerIndex);
+}
+
+function getMoves() {
+  fetch('http://localhost:3000/getMoves', {
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'include', // include, *omit
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'GET', // *GET, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *same-origin
+    redirect: 'follow', // *manual, error
+    referrer: 'no-referrer', // *client
+  }).then((resp) => resp.json())
+  .then(function(data) {
+    console.log(data);
+    remoteMoveStack = data
+    setTimeout(getMoves, 1000);
+  });
+}
+getMoves();
+  </script>
+  </body>
+</html>
+

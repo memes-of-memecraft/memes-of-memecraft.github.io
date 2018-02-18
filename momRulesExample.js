@@ -115,7 +115,7 @@ for (let i = 0; i < playerOwnedMemes.length; i++) {
 }
 
 // Battle logic
-let player = [
+let exampleGameState = [
   {
     currentMemeId: 0,
     memes: [
@@ -158,7 +158,9 @@ let player = [
   }
 ];
 
-let movesStack = [
+exports.exampleGameState = exampleGameState
+
+let exampleMoveStack = [
   {
     playerId: 0,
     type: 'switch',
@@ -206,6 +208,8 @@ let movesStack = [
   }
 ];
 
+exports.exampleMoveStack = exampleMoveStack;
+
 function getDamage(meme, moveId) {
   let memeRules = getMemeRules(meme.id);
   if (memeRules.moves.indexOf(moveId) == -1) {
@@ -216,35 +220,41 @@ function getDamage(meme, moveId) {
   return attackStat + memeMoves[moveId].damage
 }
 
-function logPlayers() {
-  console.log('Player 1 Meme: ' + getMemeRules(player[0].memes[player[0].currentMemeId].id).name + ' - Health: ' + player[0].memes[player[0].currentMemeId].health);
-  console.log('Player 2 Meme: ' + getMemeRules(player[1].memes[player[1].currentMemeId].id).name + ' - Health: ' + player[1].memes[player[1].currentMemeId].health);
+function logPlayers(gameState) {
+  console.log('Player 1 Meme: ' + getMemeRules(gameState[0].memes[gameState[0].currentMemeId].id).name + ' - Health: ' + gameState[0].memes[gameState[0].currentMemeId].health);
+  console.log('Player 2 Meme: ' + getMemeRules(gameState[1].memes[gameState[1].currentMemeId].id).name + ' - Health: ' + gameState[1].memes[gameState[1].currentMemeId].health);
 }
 
-// Play moves
-for (let moveCounter = 0; moveCounter < movesStack.length; moveCounter++) { 
-  let currentMove = movesStack[moveCounter]
-  let currentPlayer = player[currentMove.playerId]
-  let otherPlayer = player[1 - currentMove.playerId]
-  console.log('\n~~~~~~ Player ' + (currentMove.playerId+1) + ' Move ' + (moveCounter+1) + ' ~~~~~');
-  if (currentMove.type === 'attack') {
+exports.applyMove = (gameState, move) => {
+  // TODO: Add move validation!
+  let currentPlayer = gameState[move.playerId]
+  let otherPlayer = gameState[1 - move.playerId]
+  if (move.type === 'attack') {
     let memeId = currentPlayer.currentMemeId;
-    let damage = getDamage(currentPlayer.memes[memeId], currentMove.id);
-    console.log('Attack! Move: ' + memeMoves[currentMove.id].name + ' - Damage: ' + damage);
+    let damage = getDamage(currentPlayer.memes[memeId], move.id);
+    console.log('Attack! Move: ' + memeMoves[move.id].name + ' - Damage: ' + damage);
     otherPlayer.memes[otherPlayer.currentMemeId].health -= damage;
     // Log
-    logPlayers();
+    logPlayers(gameState);
   }
-  else if (currentMove.type === 'switch') {
-    memeRulesForSwitchedMeme = getMemeRules(currentPlayer.memes[currentMove.id].id);
+  else if (move.type === 'switch') {
+    memeRulesForSwitchedMeme = getMemeRules(currentPlayer.memes[move.id].id);
     console.log('Switch to ' + memeRulesForSwitchedMeme.name);
-    player[currentMove.playerId].currentMemeId = currentMove.id;
-    logPlayers();
+    gameState[move.playerId].currentMemeId = move.id;
+    logPlayers(gameState);
   }
-  else if (currentMove.type === 'death switch') {
-    memeRulesForSwitchedMeme = getMemeRules(currentPlayer.memes[currentMove.id].id);
+  else if (move.type === 'death switch') {
+    memeRulesForSwitchedMeme = getMemeRules(currentPlayer.memes[move.id].id);
     console.log('Death switch to ' + memeRulesForSwitchedMeme.name);
-    player[currentMove.playerId].currentMemeId = currentMove.id;
-    logPlayers();
+    gameState[move.playerId].currentMemeId = move.id;
+    logPlayers(gameState);
   }
+  return gameState;
 }
+
+// // Play example moves
+// for (let moveCounter = 0; moveCounter < exampleMoveStack.length; moveCounter++) { 
+//   move = exampleMoveStack[moveCounter];
+//   console.log('\n~~~~~~ Player ' + (move.playerId+1) + ' Move ' + (moveCounter+1) + ' ~~~~~');
+//   exports.applyMove(exampleGameState, move);
+// }

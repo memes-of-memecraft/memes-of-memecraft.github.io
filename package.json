@@ -1,0 +1,26 @@
+{
+  "name": "mom-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "battle-server.js",
+  "scripts": {
+    "start": "node battle-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/memes-of-memecraft/memes-of-memecraft.github.io.git"
+  },
+  "author": "egod the plur",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/memes-of-memecraft/memes-of-memecraft.github.io/issues"
+  },
+  "homepage": "https://github.com/memes-of-memecraft/memes-of-memecraft.github.io#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6"
+  }
+}
