@@ -2,16 +2,70 @@
 <html>
   <head>
     <title>Battle</title>
+
+
+    <style>
+
+      img {
+        width: 100px;
+        height: 100px;
+      }
+
+      div#gameContainer {
+        text-align: center;
+        width: 300px;
+      }
+
+      div#player {
+        width: 150px;
+        float: left;
+      }
+
+      div#player button {
+        margin-top: 10px;
+      }
+
+      #join-queue {
+        margin-top: 10px;
+      }
+
+    </style>
   </head>
 
   <body>
-    <!-- HTML START -->
-    <button id="player0-button" onclick="move(0)">Make player 1 move</button>
-    <button id="player1-button" onclick="move(1)">Make player 2 move</button>
-    <button id="join-queue" onclick="joinQueue()">Join queue</button>
-    <div id="battle-log"></div>
-    <!-- HTML END -->
+
+    <div id="gameContainer">
+      <div id="player">
+        <img id="player0-image" src="https://avatars0.githubusercontent.com/u/36283026?s=400&u=9eb052272125fada0b00cc2cd7dccaa6be4631c6&v=4" /><br />
+        <button id="player0-button" onclick="move(0)">Player 1 move</button>
+      </div>
+
+      <div id="player">
+        <img id="player1-image" src="https://s3.amazonaws.com/ebaumsworld.prod/uploads1514315704094-635855830364428898.jpeg" /><br />
+        <button id="player1-button" onclick="move(1)">Player 2 move</button>
+      </div>
+      <button id="join-queue" onclick="joinQueue()">Join queue</button>
+      <div id="battle-log"></div>
+    </div>
   <script>
+
+
+let playerImages = [
+  [
+    "https://media1.tenor.com/images/8fbda6a13aee444e0397f07541d1f98e/tenor.gif",
+    "https://media.giphy.com/media/DlK2z5qILD0fC/giphy.gif",
+    "https://media1.tenor.com/images/65bc3ade1032d7a5a60349109c3a9823/tenor.gif?itemid=4981760",
+    "https://m.popkey.co/b8b56f/OXo8L_s-200x150.gif",
+    "https://thumbs.gfycat.com/GrandioseEvenAustraliansilkyterrier-max-1mb.gif"
+  ],
+  [
+    "http://i0.kym-cdn.com/photos/images/newsfeed/001/320/442/a99.gif",
+    "http://i0.kym-cdn.com/photos/images/newsfeed/001/319/078/964.gif",
+    "https://i.warosu.org/data/biz/img/0033/93/1504888648684.gif",
+    "https://www.wykop.pl/cdn/c3201142/comment_1HGoMmreTs5EcnlnIdsvE2GdV017zJkx.gif",
+    "https://img.4plebs.org/boards/x/image/1503/81/1503812448630.gif"
+  ]
+]
 
 let moves = [
   [
@@ -115,6 +169,8 @@ let movesStack = [
 
 remoteMoveStack = []
 
+var moveIndex = [0, 0];
+
 function post(url, postBody, cb) {
   fetch(url, {
     body: JSON.stringify(postBody),
@@ -164,7 +220,18 @@ function move(playerIndex) {
   var nextMove = movesStack[nextMoveIndex];
   console.log(nextMove)
   sendMove(nextMove)
+  updateImage(playerIndex)
   console.log('Made move for player: ' + playerIndex);
+}
+
+function updateImage(playerIndex) {
+  var imageId = 'player'+playerIndex+'-image';
+  var div = document.getElementById(imageId);
+  div.src = playerImages[playerIndex][moveIndex[playerIndex]];
+  moveIndex[playerIndex]++;
+  if (moveIndex[playerIndex] > 4) {
+    moveIndex[playerIndex] = 0;
+  }
 }
 
 function getMoves() {
