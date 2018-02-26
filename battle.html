@@ -3,50 +3,414 @@
   <head>
     <title>Battle</title>
 
-
     <style>
+    	@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 
-      img {
-        width: 100px;
-        height: 100px;
-      }
+		@import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow');
 
-      div#gameContainer {
-        text-align: center;
-        width: 300px;
-      }
+		html,body {
+		  height: 100%;
+		  background-color: #FFF;
+		}
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-      div#player {
-        width: 150px;
-        float: left;
-      }
+		.title {
+		  position: relative;
+		  margin-top: 10px;
+		  color: white;
+		  text-align: center;
+		  font-size: 28px;
+		  text-transform: uppercase;
+		  font-family: "Roboto Condensed";
+		}
 
-      div#player button {
-        margin-top: 10px;
-      }
+		.battle-scene {
+		  position: relative;
+		  margin: auto;
+		  display: block;
+		  margin-top: 3%;
+		  width: 785px;
+		  height: 550px;
+		  background: #F8F8F8;
+		  z-index: 1;
+		}
 
-      #join-queue {
-        margin-top: 10px;
-      }
+		.box-top-left {
+		  position: absolute;
+		  width: 40%;
+		  height: 15%;
+		  border-radius: 5px;
+		  top: 8%;
+		  left: 8%;
+		  background: #F8F8D8;
+		  border: 2px solid #506860;
+		}
 
-    </style>
+		.hp-bar-top {
+		  position: absolute;
+		  bottom: 16%;
+		  height: 20%;
+		  width: 70%;
+		  left: 10%;
+		  border-radius: 20px;
+		  background: grey;
+		  opacity: 0.5;
+		}
+
+		.hp-bar-bottom {
+		  position: absolute;
+		  bottom: 32%;
+		  height: 20%;
+		  width: 70%;
+		  left: 10%;
+		  border-radius: 20px;
+		  background: grey;
+		  opacity: 0.5;
+		}
+
+		.hp-bar-fill {
+		  position: absolute;
+		  height: 100%;
+		  border-radius: 20px;
+		  background: purple;
+		}
+
+		.box-top-right {
+		  position: absolute;
+		  width: 40%;
+		  height: 25%;
+		  border-radius: 50%;
+		  top: 25%;
+		  right: 8%;
+		  background: #E0E0E0;
+		}
+
+		.meme-top {
+		  height: 150%;
+		  width: 50%;
+		  position: absolute;
+		  top: -80%;
+		  left: 25%;
+		}
+
+		.meme-bottom {
+		  height: 150%;
+		  width: 50%;
+		  position: absolute;
+		  top: -75%;
+		  left: 25%;
+		}
+
+
+		.box-bottom-left {
+		 position: absolute;
+		  width: 40%;
+		  height: 25%;
+		  border-radius: 50%;
+		  bottom: 15%;
+		  left: 8%;
+		  background: #E0E0E0;
+		}
+
+		.hp-bar-box {
+		  
+		}
+
+		.box-bottom-right {
+		  position: absolute;
+		  width: 40%;
+		  height: 17%;
+		  border-radius: 5px;
+		  bottom:24%;
+		  right: 8%;
+		  background: #F8F8D8;
+		  border: 2px solid #506860;
+		  z-index: 2;
+		}
+
+		.meme {
+		  text-align: left;
+		  margin-left: 10%;
+		  margin-top: 5%;
+		  opacity: 0.7;
+		  font-size: 18px;
+		  font-family: "Roboto Condensed";
+		}
+
+		.level {
+		  position: absolute;
+		  right: 8%;
+		  top: -11%;
+		  opacity: 0.7;
+		  font-size: 16px;
+		  font-family: "Roboto Condensed";
+		}
+
+		.hp {
+		  position: absolute;
+		  right: 8%;
+		  bottom: -20%;
+		  opacity: 0.7;
+		  font-size: 16px;
+		  font-family: "Roboto Condensed";
+		}
+
+		.bottom-menu {
+		  position: absolute;
+		  width: 98%;
+		  bottom: 0%;
+		  height: 19%;
+		  background: #285068;
+		  z-index: 1;
+		  border: solid 6px #CEB46D;
+		}
+
+		.text-box-left {
+		  position: absolute;
+		  width: 50%;
+		  left: 0%;
+		  height: 95%;
+		  
+		}
+
+		.text-box-right {
+		  position: absolute;
+		  width: 40%;
+		  top: -6%;
+		  right: -1%;
+		  height: 98%;
+		  background: #F8F8F8;
+		  border: solid 6px #6F677F;
+		  
+		}
+
+		.battle-text {
+		  margin-top: 3%;
+		  margin-left: 5%;
+		  opacity: 0.95;
+		  font-size: 18px;
+		  color: white;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		}
+
+		.battle-text-top-left {
+		  opacity: 0.95;
+		  position: absolute;
+		  font-size: 22px;
+		  color: #333333;
+		  top: -30%;
+		  left: 10%;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		  cursor: pointer;
+		}
+
+		.battle-text-bottom-left {
+		  opacity: 0.95;
+		  position: absolute;
+		  font-size: 22px;
+		  color: #333333;
+		  bottom: -30%;
+		  left: 10%;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		  cursor: pointer;
+		}
+
+		.battle-text-top-right {
+		  opacity: 0.95;
+		  position: absolute;
+		  font-size: 22px;
+		  color: #333333;
+		  top: -30%;
+		  right: 21%;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		  cursor: pointer;
+		}
+
+		.battle-text-bottom-right {
+		  opacity: 0.95;
+		  position: absolute;
+		  font-size: 22px;
+		  color: #333333;
+		  bottom: -30%;
+		  right: 20%;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		  cursor: pointer;
+		} 
+
+		@media all and (max-width: 600px) {
+		 .battle-scene {
+		  position: relative;
+		  margin: auto;
+		  display: block;
+		  margin-top: 3%;
+		  width: 400px;
+		  height: 280px;
+		  background: #F8F8F8;
+		  z-index: 1;
+		}
+		  
+		  .title {
+		  position: absolute;
+		  top: -33%;
+		  left: 7.5%;
+		  color: white;
+		  text-align: center;
+		  font-size: 22px;
+		  text-transform: uppercase;
+		  font-family: "Roboto Condensed";
+		}
+		  
+		.meme {
+		  text-align: left;
+		  margin-left: 11%;
+		  margin-top: 5%;
+		  opacity: 0.7;
+		  font-size: 14px;
+		  font-family: "Roboto Condensed";
+		}
+		  
+		  
+		.level {
+		  position: absolute;
+		  right: 5%;
+		  top: -13%;
+		  opacity: 0.7;
+		  font-size: 10px;
+		  font-family: "Roboto Condensed";
+		}
+		  
+		.hp {
+		  position: absolute;
+		  right: 8%;
+		  bottom: -20%;
+		  opacity: 0.7;
+		  font-size: 11px;
+		  font-family: "Roboto Condensed";
+		}
+		  
+		  
+		.battle-text-top-left {
+		  opacity: 0.95;
+		  position: absolute;
+		  font-size: 14px;
+		  color: #333333;
+		  top: -30%;
+		  left: 10%;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		  cursor: pointer;
+		}
+
+		.battle-text-bottom-left {
+		  opacity: 0.95;
+		  position: absolute;
+		  font-size: 14px;
+		  color: #333333;
+		  bottom: -30%;
+		  left: 10%;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		  cursor: pointer;
+		}
+
+		.battle-text-top-right {
+		  opacity: 0.95;
+		  position: absolute;
+		  font-size: 14px;
+		  color: #333333;
+		  top: -30%;
+		  right: 21%;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		  cursor: pointer;
+		}
+
+		.battle-text-bottom-right {
+		  opacity: 0.95;
+		  position: absolute;
+		  font-size: 14px;
+		  color: #333333;
+		  bottom: -30%;
+		  right: 20%;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		  cursor: pointer;
+		} 
+		  
+		.battle-text {
+		  margin-top: 1%;
+		  margin-left: 5%;
+		  opacity: 0.95;
+		  font-size: 10px;
+		  color: white;
+		  text-align: left;
+		  font-family: "PT Sans Narrow";
+		}
+
+
+
+		}
+
+	</style>
   </head>
 
-  <body>
+<!--- Must wait for messages to complete before clicking -->
 
-    <div id="gameContainer">
-      <div id="player">
-        <img id="player0-image" src="https://avatars0.githubusercontent.com/u/36283026?s=400&u=9eb052272125fada0b00cc2cd7dccaa6be4631c6&v=4" /><br />
-        <button id="player0-button" onclick="move(0)">Player 1 move</button>
-      </div>
+<body>
 
-      <div id="player">
-        <img id="player1-image" src="https://s3.amazonaws.com/ebaumsworld.prod/uploads1514315704094-635855830364428898.jpeg" /><br />
-        <button id="player1-button" onclick="move(1)">Player 2 move</button>
-      </div>
-      <button id="join-queue" onclick="joinQueue()">Join queue</button>
-      <div id="battle-log"></div>
-    </div>
+ <div id="app">
+    <h1 class="title">Meme Battle</h1>
+ <!-- Begin battle scene -->
+ <div class="battle-scene">
+   <div class="box-top-left">
+     <h2 class="meme">Player 2</h2>
+     <div class="hp-bar-top">
+       <div v-bind:style="opponentHpBar" class="hp-bar-fill"></div>
+     </div>
+     <h4 class="level">100/100</h4>
+   </div>
+   <div class="box-top-right">
+        <img id="player1-image" class="meme-bottom" src="https://s3.amazonaws.com/ebaumsworld.prod/uploads1514315704094-635855830364428898.jpeg" />
+   </div>
+    <div class="box-bottom-left">
+    	 <img id="player0-image" class="meme-top" src="https://avatars0.githubusercontent.com/u/36283026?s=400&u=9eb052272125fada0b00cc2cd7dccaa6be4631c6&v=4" />
+      
+   </div>
+   <div class="box-bottom-right">
+      <h2 class="meme"> Player 1</h2>
+     <div class="hp-bar-bottom">
+       <div v-bind:style="userHpBar" class="hp-bar-fill"></div>
+     </div>
+     <h4 class="level">100/100</h4>
+   </div>
+   <div class="bottom-menu">
+     <div id="battle-log" class="battle-text text-box-left">
+       Insert text here
+     </div>
+       <div class="text-box-right">
+       <div v-if="optionsOn" id="battleOptions">
+       		<h4 id="player0-button" onclick="move(0)" class="battle-text-top-left">1 move</h4>
+			<h4 id="player1-button" onclick="move(1)" class="battle-text-top-right">2 move</h4>
+			<h4 id="join-queue" onclick="joinQueue()" class="battle-text-bottom-left">Join Queue</h4>
+			<h4 class="battle-text-bottom-right">Switch</h4> 
+         </div>
+         
+     </div>
+   </div>
+   
+ 
+ </div> 
+  <!-- end battle scene -->
+ </div>
   <script>
 
 
